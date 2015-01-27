@@ -429,6 +429,9 @@
     * @return {HTMLElement} Returns instance of gridster Class.
     */
     fn.add_resize_handle = function($w) {
+        if ($w.find('.' + this.options.resize.handle_class).length)
+            return this;
+        
         var append_to = this.options.resize.handle_append_to;
         $(this.resize_handle_tpl).appendTo( append_to ? $(append_to, $w) : $w);
 
@@ -492,6 +495,45 @@
         return $widget;
     };
 
+     /**
+      * Change the dimensions of widgets.
+      *
+      * @method resize_widget_dimensions
+      * @param {Object} [options] An Object with all options you want to
+      *        overwrite:
+      *    @param {Array} [options.widget_margins] Margin between widgets.
+      *     The first index for the horizontal margin (left, right) and
+      *     the second for the vertical margin (top, bottom).
+      *    @param {Array} [options.widget_base_dimensions] Base widget dimensions
+      *     in pixels. The first index for the width and the second for the
+      *     height.
+      * @return {Class} Returns the instance of the Gridster Class.
+      */
+     fn.resize_widget_dimensions = function(options) {
+         if (options.widget_margins) {
+             this.options.widget_margins = options.widget_margins;
+         }
+
+         if (options.widget_base_dimensions) {
+             this.options.widget_base_dimensions = options.widget_base_dimensions;
+         }
+
+         this.min_widget_width  = (this.options.widget_margins[0] * 2) + this.options.widget_base_dimensions[0];
+         this.min_widget_height = (this.options.widget_margins[1] * 2) + this.options.widget_base_dimensions[1];
+
+         var serializedGrid = this.serialize();
+         this.$widgets.each($.proxy(function(i, widget) {
+             var $widget = $(widget);
+             this.resize_widget($widget);
+         }, this));
+
+         this.generate_grid_and_stylesheet();
+         this.get_widgets_from_DOM();
+         this.set_dom_grid_height();
+
+         return this;
+     };
+     
 
     /**
     * Mutate widget dimensions and position in the grid map.
