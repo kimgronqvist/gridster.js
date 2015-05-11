@@ -1,4 +1,4 @@
-/*! gridster.js - v0.5.6 - 2015-01-26
+/*! gridster.js - v0.5.6 - 2015-02-02
 * http://gridster.net/
 * Copyright (c) 2015 ducksboard; Licensed MIT */
 
@@ -2243,8 +2243,8 @@
 
         size_y = Math.max(Math.min(size_y, max_size_y), min_size_y);
         max_height = (max_size_y * wbd_y) + ((size_y - 1) * margin_y * 2);
-        min_height = (min_size_y * wbd_y) + ((size_y - 1) * margin_y * 2);
-
+        min_height = ((min_size_y - 1) * 48) + 32;
+        
         if (this.resize_dir.right) {
             size_y = this.resize_initial_sizey;
         } else if (this.resize_dir.bottom) {
